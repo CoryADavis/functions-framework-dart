@@ -17,6 +17,7 @@ import 'dart:io';
 
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
+import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 
 Future<void> run(
   int port,
@@ -25,9 +26,7 @@ Future<void> run(
   Middleware loggingMiddleware,
 ) async {
   final server = await shelf_io.serve(
-    loggingMiddleware
-        .addMiddleware(_forbiddenAssetMiddleware)
-        .addHandler(handler),
+    loggingMiddleware.addMiddleware(corsHeaders()).addMiddleware(_forbiddenAssetMiddleware).addHandler(handler),
     InternetAddress.anyIPv4,
     port,
   );
